@@ -228,9 +228,9 @@ npm start
 
 <table>
   <tr>
-    <td align="center" width="200">
-      <img src="https://img.shields.io/badge/M1-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
-      <b>Member 1</b><br/>
+    <td align="center" width="180">
+      <img src="https://img.shields.io/badge/M1-Team_Lead-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
+      <b>Member 1 (You)</b><br/>
       <sub>Role / Title</sub><br/><br/>
       <a href="#">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
@@ -239,7 +239,7 @@ npm start
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="200">
+    <td align="center" width="180">
       <img src="https://img.shields.io/badge/M2-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
       <b>Member 2</b><br/>
       <sub>Role / Title</sub><br/><br/>
@@ -250,7 +250,7 @@ npm start
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="200">
+    <td align="center" width="180">
       <img src="https://img.shields.io/badge/M3-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
       <b>Member 3</b><br/>
       <sub>Role / Title</sub><br/><br/>
@@ -261,9 +261,20 @@ npm start
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="200">
+    <td align="center" width="180">
       <img src="https://img.shields.io/badge/M4-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
       <b>Member 4</b><br/>
+      <sub>Role / Title</sub><br/><br/>
+      <a href="#">
+        <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
+      </a>
+      <a href="#">
+        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
+      </a>
+    </td>
+    <td align="center" width="180">
+      <img src="https://img.shields.io/badge/M5-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
+      <b>Member 5</b><br/>
       <sub>Role / Title</sub><br/><br/>
       <a href="#">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
