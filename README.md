@@ -6,7 +6,7 @@
 
 *From finding the right emergency hospital to exposing fraudulent medical bills — TrueCare protects your family, physically and financially.*
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-client--lyart--six--47.vercel.app-2563eb?style=for-the-badge)](https://client-lyart-six-47.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-client--lyart--six--47.vercel.app-2563eb?style=for-the-badge)](https://true-care-delta.vercel.app/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/svmbhardwaj/TrueCare)
 [![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Tailwind](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -229,63 +229,66 @@ npm start
 <table>
   <tr>
     <td align="center" width="180">
-      <img src="https://img.shields.io/badge/M1-Team_Lead-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
-      <b>Member 1 (You)</b><br/>
-      <sub>Role / Title</sub><br/><br/>
-      <a href="#">
+      <img src="https://img.shields.io/badge/M1-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
+      <b>Shivam Bhardwaj</b><br/>
+      <sub>Team Member</sub><br/><br/>
+      <a href="https://github.com/svmbhardwaj">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
       </a>
-      <a href="#">
+      <a href="https://www.linkedin.com/in/svmbhardwaj/">
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="180">
-      <img src="https://img.shields.io/badge/M2-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
-      <b>Member 2</b><br/>
-      <sub>Role / Title</sub><br/><br/>
-      <a href="#">
+
+<td align="center" width="180">
+      <img src="https://img.shields.io/badge/M2-Team_Lead-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
+      <b>Shikha Kumari</b><br/>
+      <sub>Team Lead</sub><br/><br/>
+      <a href="https://github.com/shikha320">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
       </a>
-      <a href="#">
+      <a href="https://www.linkedin.com/in/shikha320">
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="180">
+
+<td align="center" width="180">
       <img src="https://img.shields.io/badge/M3-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
-      <b>Member 3</b><br/>
-      <sub>Role / Title</sub><br/><br/>
-      <a href="#">
+      <b>Vaishnavi Sachan</b><br/>
+      <sub>Team Member</sub><br/><br/>
+      <a href="https://github.com/Vaishnavi25-code">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
       </a>
-      <a href="#">
+      <a href="https://www.linkedin.com/in/vaishnavi-sachan-79b655327">
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="180">
+
+<td align="center" width="180">
       <img src="https://img.shields.io/badge/M4-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
-      <b>Member 4</b><br/>
-      <sub>Role / Title</sub><br/><br/>
-      <a href="#">
+      <b>Yashika Chaudhary</b><br/>
+      <sub>Team Member</sub><br/><br/>
+      <a href="https://github.com/yashika-889">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
       </a>
-      <a href="#">
+      <a href="https://www.linkedin.com/in/yashika-chaudhary-a5685627a/">
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
-    <td align="center" width="180">
+
+<td align="center" width="180">
       <img src="https://img.shields.io/badge/M5-Team_Member-2563eb?style=for-the-badge&logo=github&logoColor=white" /><br/>
-      <b>Member 5</b><br/>
-      <sub>Role / Title</sub><br/><br/>
-      <a href="#">
+      <b>Deepak Kumar</b><br/>
+      <sub>Team Member</sub><br/><br/>
+      <a href="https://github.com/deepu033">
         <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
       </a>
-      <a href="#">
+      <a href="https://www.linkedin.com/in/deepu0375">
         <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
       </a>
     </td>
   </tr>
 </table>
-
 </div>
 
 > 💡 *Replace `#` in the href links above with your actual GitHub and LinkedIn profile URLs, and update the names and roles.*
@@ -302,7 +305,7 @@ This project is built for **India Innovates '26** hackathon.
 
 **Built with ❤️ for a healthier, fairer India**
 
-[![Deploy](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel)](https://client-lyart-six-47.vercel.app)
+[![Deploy](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel)](https://true-care-delta.vercel.app/)
 
 ⭐ Star this repo if you believe in transparent healthcare!
 
