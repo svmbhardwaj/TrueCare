@@ -6,10 +6,10 @@
 
 *From finding the right emergency hospital to exposing fraudulent medical bills — TrueCare protects your family, physically and financially.*
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-client--lyart--six--47.vercel.app-2563eb?style=for-the-badge)](https://true-care-delta.vercel.app/)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/svmbhardwaj/TrueCare)
-[![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
-[![Tailwind](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_App-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://true-care-delta.vercel.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/svmbhardwaj/TrueCare)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
 
 <br/>
@@ -20,7 +20,7 @@
 
 ---
 
-## 📌 The Problem
+## 🚨 Problem Statement
 
 Every year in India:
 
@@ -290,8 +290,6 @@ npm start
   </tr>
 </table>
 </div>
-
-> 💡 *Replace `#` in the href links above with your actual GitHub and LinkedIn profile URLs, and update the names and roles.*
 
 ---
 
