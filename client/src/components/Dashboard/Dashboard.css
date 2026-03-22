@@ -1,0 +1,607 @@
+/* Dashboard.css - TrueCare High Fidelity Smart Emergency Navigator */
+
+.dashboard-page {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-main-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  margin-top: 72px; /* Navbar height */
+}
+
+/* Sidebar Styling - w-96 (384px) */
+.dashboard-sidebar {
+  width: 384px;
+  background-color: var(--iced-mint);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(63, 93, 62, 0.1);
+  z-index: 40;
+}
+
+.sidebar-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-title {
+  font-family: var(--font-headline);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  letter-spacing: -0.02em;
+}
+
+.sidebar-subtitle {
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+  line-height: 1.5;
+}
+
+/* Filters Section */
+.filters-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--outline);
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.medical-select {
+  width: 100%;
+  background-color: white;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  padding-right: 48px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  appearance: none;
+  cursor: pointer;
+}
+
+.medical-select:focus {
+  outline: 2px solid var(--hunter-green);
+}
+
+.select-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--outline);
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: white;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.checkbox-card:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.checkbox-card:active {
+  transform: scale(0.98);
+}
+
+.checkbox-card input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--hunter-green);
+  border-radius: 4px;
+}
+
+.checkbox-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface);
+}
+
+/* Hospital List */
+.hospital-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.found-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--outline);
+}
+
+.sort-link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--hunter-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.hospital-card {
+  background-color: white;
+  padding: 16px;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(63, 93, 62, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.2s;
+}
+
+.hospital-card.featured {
+  border-left: 4px solid var(--hunter-green);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.hosp-info h3 {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.hosp-meta {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.verified-tag {
+  background-color: rgba(63, 93, 62, 0.1);
+  color: var(--hunter-green);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.verified-text {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.btn-action {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-action.primary {
+  background-color: var(--hunter-green);
+  color: white;
+  box-shadow: 0 4px 12px rgba(63, 93, 62, 0.2);
+}
+
+.btn-action.primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-action.secondary {
+  background-color: var(--iced-mint);
+  color: var(--hunter-green);
+}
+
+.btn-action:active {
+  transform: scale(0.95);
+}
+
+/* Map Pane */
+.map-pane {
+  flex: 1;
+  position: relative;
+  background-color: var(--surface-container);
+  overflow: hidden;
+}
+
+.map-background {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUJuf9DqNaG-joYpsjuE75MXQiL6frU4SGtE5PcyIlmsP5o7QGiPeomms5MOqEqvnPjI1SGkRX80tM12r4fLT4ZBrnWJj8dW7xQgFrhQvcPLn2uHaHbEdoSTTipraXY6mSFLtjxR7aTOzS0vnJpBgsymG6j1uGvC1vudSjPFRCVPiMwJNYIGYqVayPvO5TLCH5xZxH0f0PMoU1ZYshiNyfHwbgFZM7MxjzHYGrT_nrSJF3TvHtZd29QsiNmpEnZpAGGV5Pc_jRfKY');
+  background-size: cover;
+  background-position: center;
+}
+
+.map-overlay-tint {
+  position: absolute;
+  inset: 0;
+  background-color: var(--hunter-green);
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+
+/* Civic Compass Overlay */
+.civic-compass-overlay {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  padding: 0 24px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.compass-card {
+  pointer-events: auto;
+  background-color: var(--hunter-green);
+  color: white;
+  padding: 16px;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+.compass-icon-box {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compass-content {
+  flex: 1;
+}
+
+.compass-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.compass-main {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.compass-main span {
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.btn-close:hover {
+  color: white;
+}
+
+/* Map Markers */
+.marker-container {
+  position: absolute;
+  cursor: pointer;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.glass-tooltip {
+  background: rgba(241, 245, 226, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid white;
+  margin-bottom: 8px;
+  transform: translateY(8px);
+  transition: transform 0.2s ease-out;
+}
+
+.marker-container:hover .glass-tooltip {
+  transform: translateY(0);
+}
+
+.tooltip-icon {
+  width: 40px;
+  height: 40px;
+  background-color: var(--hunter-green);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.tooltip-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hosp-name-mini {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.unit-tag {
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--hunter-green);
+}
+
+.pulse-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulse-circle {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  background-color: var(--hunter-green);
+  border-radius: 50%;
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.1; transform: scale(2.5); }
+}
+
+.marker-point {
+  width: 16px;
+  height: 16px;
+  background-color: var(--hunter-green);
+  border: 4px solid white;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+/* Verified Info Overlay */
+.verified-info-panel {
+  position: absolute;
+  top: 96px;
+  right: 40px;
+  width: 288px;
+  background: rgba(241, 245, 226, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 24px;
+  border-radius: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-header h4 {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.info-desc {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  line-height: 1.6;
+}
+
+.progress-bar {
+  height: 6px;
+  width: 100%;
+  background-color: var(--surface-dim);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--hunter-green);
+  width: 80%;
+}
+
+.pulse-status {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--hunter-green);
+  text-align: right;
+  text-transform: uppercase;
+}
+
+/* Emergency Hotline Badge */
+.emergency-hotline {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  background: rgba(241, 245, 226, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 16px;
+  border-radius: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 50;
+}
+
+.hotline-icon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--error);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(186, 26, 26, 0.2);
+}
+
+.hotline-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hotline-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--outline);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hotline-number {
+  font-family: var(--font-headline);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--on-surface);
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  display: none;
+  background-color: rgba(241, 245, 226, 0.9);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(63, 93, 62, 0.1);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 16px 24px;
+}
+
+.mob-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.mob-nav-item.active {
+  background-color: var(--hunter-green);
+  color: white;
+  padding: 8px 24px;
+  border-radius: var(--radius-xl);
+}
+
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    display: none;
+  }
+  .mobile-nav {
+    display: flex;
+  }
+  .verified-info-panel, .emergency-hotline {
+    right: 20px;
+  }
+}
