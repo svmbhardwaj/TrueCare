@@ -174,3 +174,25 @@
   padding-left: 2.5rem;
   padding-right: 2.5rem;
 }
+
+/* Category Tags */
+.category-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.category-medicine { background: #eff6ff; color: #2563eb; }
+.category-room { background: #f5f3ff; color: #7c3aed; }
+.category-consultation { background: #fffbeb; color: #d97706; }
+.category-procedure { background: #fdf2f8; color: #db2777; }
+.category-consumable { background: #ecfdf5; color: #059669; }
+.category-tax { background: #fff7ed; color: #ea580c; }
+.category-other { background: #f1f5f9; color: #64748b; }
+
