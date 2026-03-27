@@ -47,6 +47,17 @@ const HomePage = () => {
                   </div>
                   <span className="material-symbols-outlined arrow-move">arrow_forward</span>
                 </button>
+
+                <button className="bill-cta-btn" onClick={() => navigate('/truebill')}>
+                  <div className="bill-cta-icon-circle">
+                    <span className="material-symbols-outlined">receipt_long</span>
+                  </div>
+                  <div className="bill-cta-content">
+                    <span className="bill-cta-title">Check Your Hospital Bill</span>
+                    <span className="bill-cta-subtitle">AI audit for overcharges, GST errors, and suspicious line items</span>
+                  </div>
+                  <span className="material-symbols-outlined">north_east</span>
+                </button>
               </div>
             </div>
 

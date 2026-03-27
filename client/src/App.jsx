@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from './components/LoginPage/LoginPage'
 import HospitalDetails from './components/HospitalDetails/HospitalDetails'
 import HomePage from './components/HomePage/HomePage'
@@ -18,8 +18,10 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/details" element={<HomePage />} />
-          <Route path="/bill-ai" element={<BillAI />} />
-          <Route path="/bill-result" element={<BillResult />} />
+          <Route path="/truebill" element={<BillAI />} />
+          <Route path="/truebill/result" element={<BillResult />} />
+          <Route path="/bill-ai" element={<Navigate to="/truebill" replace />} />
+          <Route path="/bill-result" element={<Navigate to="/truebill/result" replace />} />
           <Route path="/history" element={<History />} />
         </Routes>
       </div>

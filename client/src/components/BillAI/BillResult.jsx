@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { 
   AlertCircle, 
-  CheckCircle, 
-  Download, 
   Scale, 
   Gavel, 
   ArrowLeft,
   Info,
   ShieldCheck,
-  Truck,
-  Leaf,
-  Bell,
-  UserCircle,
   FileText,
   ChevronDown,
   ChevronUp,
@@ -45,7 +39,7 @@ const BillResult = () => {
               <p style={{ color: '#434655', marginBottom: '24px' }}>
                 Please upload a bill image first to see the analysis results.
               </p>
-              <Link to="/bill-ai" className="btn-report btn-tc-solid" style={{ display: 'inline-flex', textDecoration: 'none' }}>
+              <Link to="/truebill" className="btn-report btn-tc-solid" style={{ display: 'inline-flex', textDecoration: 'none' }}>
                 <FileText size={18} /> Go to Bill Upload
               </Link>
             </div>
@@ -89,6 +83,17 @@ const BillResult = () => {
   const extractionQuality = summary?.extractionQuality ?? extraction?.extractionQuality ?? 0;
   const avgRiskScore = summary?.avgRiskScore ?? 0;
   const extractionSourceLabel = extraction?.source === 'fallback' ? 'Fallback Parser' : 'GenAI Extraction';
+  const confidenceLevel = extractionQuality >= 85 ? 'high' : extractionQuality >= 65 ? 'medium' : 'low';
+  const confidenceLabel = confidenceLevel === 'high'
+    ? 'High Confidence'
+    : confidenceLevel === 'medium'
+      ? 'Moderate Confidence'
+      : 'Needs Manual Review';
+  const confidenceNote = confidenceLevel === 'high'
+    ? 'Line item extraction is reliable for dispute-ready drafting.'
+    : confidenceLevel === 'medium'
+      ? 'Verify a few critical line items before filing a formal grievance.'
+      : 'Please re-upload a clearer image or verify against original discharge bill.';
 
   return (
     <div className="bill-result-page">
@@ -98,7 +103,7 @@ const BillResult = () => {
         {/* Back Button */}
         <div style={{ marginTop: '1.5rem' }}>
           <button
-            onClick={() => navigate('/bill-ai')}
+            onClick={() => navigate('/truebill')}
             className="back-btn"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
@@ -169,6 +174,11 @@ const BillResult = () => {
               <p className="extraction-source-label">
                 Source: {extractionSourceLabel}
               </p>
+
+              <div className={`confidence-chip confidence-chip-${confidenceLevel}`}>
+                {confidenceLabel}
+              </div>
+              <p className="confidence-note">{confidenceNote}</p>
 
               {Array.isArray(extraction?.warnings) && extraction.warnings.length > 0 && (
                 <div className="extraction-warning-card">
@@ -307,7 +317,7 @@ const BillResult = () => {
         {/* Action Bar */}
         <div className="action-bar-fixed">
           <div className="max-7xl" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-            <button className="btn-report btn-tc-soft" onClick={() => navigate('/bill-ai')}>
+            <button className="btn-report btn-tc-soft" onClick={() => navigate('/truebill')}>
               <FileText size={18} /> Analyze Another
             </button>
             <button className="btn-report btn-tc-soft">

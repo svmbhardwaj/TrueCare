@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Bell, User } from 'lucide-react'; // Removing these as we switch to Material Symbols
 import './Navbar.css';
 
 const Navbar = () => {
@@ -19,7 +18,7 @@ const Navbar = () => {
             Emergency
           </NavLink>
           <NavLink 
-            to="/bill-ai" 
+            to="/truebill" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           >
             Bill AI

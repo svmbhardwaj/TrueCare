@@ -132,6 +132,41 @@
   font-weight: 600;
 }
 
+.confidence-chip {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.confidence-chip-high {
+  background: rgba(16, 185, 129, 0.16);
+  color: #047857;
+}
+
+.confidence-chip-medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+
+.confidence-chip-low {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+.confidence-note {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: #556074;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .extraction-warning-card {
   margin-top: 0.55rem;
   background: rgba(254, 243, 199, 0.6);

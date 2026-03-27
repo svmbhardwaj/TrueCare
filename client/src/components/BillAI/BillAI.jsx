@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { 
   Upload, 
   Camera, 
@@ -21,13 +21,20 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
+import { analyzeBillRequest } from '../../services/truebillApi';
+import { getDemoTruebillResult } from '../../services/truebillDemoData';
 import './BillAI.css';
 
-const API_URL = 'http://localhost:5000';
+const RECENT_AUDITS = [
+  { id: 1, name: 'Med-Invoice-992.pdf', date: 'Oct 24, 2024', hospital: 'St. Jude Medical Center', amount: '₹1,42,500', status: 'Anomaly Detected', statusColor: 'red' },
+  { id: 2, name: 'Pharmacy_Receipt_4.jpg', date: 'Oct 22, 2024', hospital: 'Apollo Pharmacy Ltd.', amount: '₹4,200', status: 'Analysis Complete', statusColor: 'green' },
+  { id: 3, name: 'Discharge_Summary_v2.pdf', date: 'Oct 20, 2024', hospital: 'City General Hospital', amount: '₹8,90,200', status: 'Processing...', statusColor: 'gray' },
+];
 
 const BillAI = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const objectUrlRef = useRef(null);
 
   // State
   const [selectedFile, setSelectedFile] = useState(null);
@@ -38,6 +45,16 @@ const BillAI = () => {
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const isConnectionError = typeof error === 'string' && error.toLowerCase().includes('connect');
+
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+    };
+  }, []);
 
   // Format file size
   const formatFileSize = (bytes) => {
@@ -61,8 +78,17 @@ const BillAI = () => {
     }
     setSelectedFile(file);
     if (isImage) {
-      setPreview(URL.createObjectURL(file));
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+      const objectUrl = URL.createObjectURL(file);
+      objectUrlRef.current = objectUrl;
+      setPreview(objectUrl);
     } else {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = null;
+      }
       setPreview('pdf'); // special marker for PDF
     }
     setFileInfo({
@@ -78,6 +104,10 @@ const BillAI = () => {
 
   // Clear
   const clearFile = () => {
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
     setSelectedFile(null);
     setPreview(null);
     setFileInfo(null);
@@ -105,36 +135,23 @@ const BillAI = () => {
     setLoadingStep(1);
 
     try {
-      const formData = new FormData();
-      formData.append('billImage', selectedFile);
-
       const stepTimers = [
         setTimeout(() => setLoadingStep(2), 2500),
         setTimeout(() => setLoadingStep(3), 6000),
       ];
 
-      const response = await fetch(`${API_URL}/analyze-bill`, {
-        method: 'POST',
-        body: formData,
-      });
+      const data = await analyzeBillRequest({ file: selectedFile });
 
       stepTimers.forEach(clearTimeout);
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || `Server error (${response.status})`);
-      }
-
-      const data = await response.json();
       setLoadingStep(4);
 
       setTimeout(() => {
-        navigate('/bill-result', { state: { result: data, billImage: preview } });
+        navigate('/truebill/result', { state: { result: data, billImage: preview } });
       }, 800);
 
     } catch (err) {
       if (err.message.includes('fetch') || err.message.includes('NetworkError')) {
-        setError('Cannot connect to server. Make sure the backend is running on port 5000.');
+        setError('We could not reach the audit engine. Start backend on port 5000 and retry.');
       } else {
         setError(err.message);
       }
@@ -143,18 +160,31 @@ const BillAI = () => {
     }
   };
 
+  const openDemoReport = () => {
+    setError(null);
+    setLoading(true);
+    setLoadingStep(1);
+
+    setTimeout(() => setLoadingStep(2), 700);
+    setTimeout(() => setLoadingStep(3), 1400);
+    setTimeout(() => {
+      setLoadingStep(4);
+      navigate('/truebill/result', {
+        state: {
+          result: getDemoTruebillResult(),
+          billImage: null,
+          isDemo: true,
+        },
+      });
+    }, 1900);
+  };
+
   // Loading step labels
   const loadingSteps = [
     { icon: Upload, label: 'Uploading bill image...', sub: 'Securing your data' },
     { icon: ScanLine, label: 'Extracting text via OCR...', sub: 'Reading every line item' },
     { icon: Sparkles, label: 'AI fraud analysis running...', sub: 'Checking 40+ anomaly patterns' },
     { icon: CheckCircle2, label: 'Analysis complete!', sub: 'Preparing your report' },
-  ];
-
-  const recentAudits = [
-    { id: 1, name: 'Med-Invoice-992.pdf', date: 'Oct 24, 2024', hospital: 'St. Jude Medical Center', amount: '₹1,42,500', status: 'Anomaly Detected', statusColor: 'red' },
-    { id: 2, name: 'Pharmacy_Receipt_4.jpg', date: 'Oct 22, 2024', hospital: 'Apollo Pharmacy Ltd.', amount: '₹4,200', status: 'Analysis Complete', statusColor: 'green' },
-    { id: 3, name: 'Discharge_Summary_v2.pdf', date: 'Oct 20, 2024', hospital: 'City General Hospital', amount: '₹8,90,200', status: 'Processing...', statusColor: 'gray' },
   ];
 
   return (
@@ -292,6 +322,22 @@ const BillAI = () => {
                   <ArrowRight size={16} />
                 </button>
 
+                {error && (
+                  <div className="inline-error-card">
+                    <AlertTriangle size={16} />
+                    <div className="inline-error-content">
+                      <p className="error-title">{error}</p>
+                      {isConnectionError && (
+                        <p className="error-help-text">Run backend service first, then tap retry.</p>
+                      )}
+                      <div className="inline-error-actions">
+                        <button className="inline-error-btn" onClick={analyzeBill}>Retry</button>
+                        <button className="inline-error-btn dismiss" onClick={() => setError(null)}>Dismiss</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <p className="analyze-disclaimer">
                   <Shield size={12} /> Your data is processed locally and never stored
                 </p>
@@ -332,11 +378,24 @@ const BillAI = () => {
                   <Upload size={16} /> Select File
                 </button>
 
+                <button
+                  className="demo-report-btn"
+                  onClick={(e) => { e.stopPropagation(); openDemoReport(); }}
+                >
+                  <Sparkles size={16} /> Try Demo Report
+                </button>
+
                 {error && (
                   <div className="upload-error-card" onClick={(e) => e.stopPropagation()}>
                     <AlertTriangle size={16} />
                     <div>
                       <p className="error-title">{error}</p>
+                      {isConnectionError && <p className="error-help-text">Tip: run backend then use Retry.</p>}
+                      {isConnectionError && (
+                        <button className="error-dismiss" onClick={(e) => { e.stopPropagation(); analyzeBill(); }}>
+                          Retry
+                        </button>
+                      )}
                       <button className="error-dismiss" onClick={(e) => { e.stopPropagation(); setError(null); }}>
                         Dismiss
                       </button>
@@ -395,7 +454,7 @@ const BillAI = () => {
                 </tr>
               </thead>
               <tbody>
-                {recentAudits.map((audit) => (
+                {RECENT_AUDITS.map((audit) => (
                   <tr key={audit.id}>
                     <td className="doc-name">
                       <div className="file-icon-bg">

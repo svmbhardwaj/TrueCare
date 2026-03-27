@@ -259,6 +259,27 @@
   transform: translateY(0);
 }
 
+.demo-report-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  background: white;
+  color: var(--deep-navy);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-report-btn:hover {
+  border-color: rgba(13, 148, 136, 0.45);
+  color: var(--rich-teal);
+  transform: translateY(-1px);
+}
+
 /* PDF format tag */
 .format-tag-pdf {
   background: #eff6ff;
@@ -324,6 +345,13 @@
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.4;
+}
+
+.error-help-text {
+  margin-top: 4px;
+  margin-bottom: 6px;
+  font-size: 0.74rem;
+  color: #9f1239;
 }
 
 .error-dismiss {
@@ -567,6 +595,44 @@
   font-weight: 500;
 }
 
+.inline-error-card {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 12px;
+  text-align: left;
+}
+
+.inline-error-content {
+  flex: 1;
+}
+
+.inline-error-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.inline-error-btn {
+  border: 1px solid rgba(185, 28, 28, 0.28);
+  background: rgba(255, 255, 255, 0.8);
+  color: #991b1b;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.inline-error-btn.dismiss {
+  opacity: 0.8;
+}
+
 
 /* ============================================================
    LOADING STATE
@@ -807,3 +873,48 @@
 .status-badge.red { background-color: #fef2f2; color: #ef4444; }
 .status-badge.green { background-color: #f0fdf4; color: #16a34a; }
 .status-badge.gray { background-color: #f1f5f9; color: #64748b; }
+
+@media (max-width: 1100px) {
+  .bill-ai-container {
+    padding: 28px 22px;
+  }
+
+  .hero-section {
+    flex-direction: column;
+    padding: 32px 24px;
+    gap: 28px;
+  }
+
+  .feature-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .bill-ai-container {
+    padding: 20px 14px;
+  }
+
+  .hero-title {
+    font-size: 42px;
+  }
+
+  .upload-box {
+    padding: 26px 16px;
+    border-radius: 20px;
+  }
+
+  .preview-file-info {
+    flex-wrap: wrap;
+  }
+
+  .change-file-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .analyze-cta {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+}

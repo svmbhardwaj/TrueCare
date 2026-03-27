@@ -99,6 +99,8 @@
 
 /* Hero Map Button Refinement */
 .hero-cta-wrapper {
+  display: grid;
+  gap: 14px;
   margin-top: 24px;
 }
 
@@ -167,6 +169,60 @@
 .arrow-move {
   font-size: 2rem;
   animation: arrowAnim 2s infinite;
+}
+
+.bill-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  max-width: 580px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--deep-navy);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.bill-cta-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(220, 38, 38, 0.45);
+  box-shadow: 0 16px 34px rgba(220, 38, 38, 0.12);
+}
+
+.bill-cta-icon-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fee2e2;
+  color: #b91c1c;
+  flex-shrink: 0;
+}
+
+.bill-cta-content {
+  flex: 1;
+  text-align: left;
+}
+
+.bill-cta-title {
+  display: block;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.bill-cta-subtitle {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8rem;
+  color: var(--slate-gray);
 }
 
 /* HERO RIGHT: ILLUSTRATION */

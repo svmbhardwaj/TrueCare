@@ -232,7 +232,7 @@ const Dashboard = () => {
           <span className="material-symbols-outlined">emergency</span>
           <span>Emergency</span>
         </NavLink>
-        <NavLink to="/bill-ai" className={({ isActive }) => isActive ? "mob-nav-item active" : "mob-nav-item"}>
+        <NavLink to="/truebill" className={({ isActive }) => isActive ? "mob-nav-item active" : "mob-nav-item"}>
           <span className="material-symbols-outlined">receipt_long</span>
           <span>Bill AI</span>
         </NavLink>
