@@ -1,74 +1,53 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { auth, googleProvider } from '../../services/firebase';
+import { signInWithPopup } from 'firebase/auth';
 import './LoginPage.css';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate('/home');
+    } catch (error) {
+      alert("Login Error: Ensure Google is enabled in Firebase Console.");
+    }
+  };
+
   return (
     <div className="login-container">
-      {/* Left Column - Digital Sanctuary */}
       <div className="login-left">
-        <div className="shield-illustration">
-          <img src="/login-shield.png" alt="Digital Shield" className="shield-img" />
+        <div className="branding-top">
+          <span className="reassurance-label">Reassurance Zone</span>
+          <h1 className="digital-shield-title">The Digital Shield</h1>
         </div>
+        <div className="shield-illustration">
+          <img src="/shield-illustration.png" alt="" className="shield-img" />
+        </div>
+        <p className="left-footer-quote">
+          Take a deep breath. We've found the right hospital and the right price for you. 🧘‍♂️
+        </p>
       </div>
 
-      {/* Right Column - Welcome Back */}
       <div className="login-right">
         <div className="help-icon">?</div>
         <div className="login-form-container">
-          <div className="header-section">
-            <h1 className="welcome-title">Get Immediate Medical Help</h1>
+          <header className="header-section">
+            <h1 className="welcome-title">Get Immediate <br /> Medical Help</h1>
             <p className="welcome-subtitle">Find hospitals, verify costs instantly</p>
-          </div>
-
-          <div className="emergency-actions">
-            <Link to="/home" className="primary-emergency-btn">
-              Skip login 
-            </Link>
-            <p className="guidance-text">We’ll guide you step-by-step.</p>
-          </div>
-
-          <div className="trust-signals-minimal">
-            <div className="trust-item">
-              <span className="trust-icon">🛡️</span>
-              <div className="trust-text">
-                <span className="trust-label">Price Protection</span>
-                <span className="trust-desc">We audit bills in real-time.</span>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-icon">💳</span>
-              <div className="trust-text">
-                <span className="trust-label">Card Acceptance</span>
-                <span className="trust-desc">Guaranteed Ayushman/Insurance entry.</span>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-icon">💰</span>
-              <div className="trust-text">
-                <span className="trust-label">No Surcharge</span>
-                <span className="trust-desc">0% GST on life-saving drugs.</span>
-              </div>
-            </div>
-          </div>
-
+          </header>
+          <button className="primary-emergency-btn" onClick={() => navigate('/home')}>
+            Skip login
+          </button>
           <div className="secondary-auth-section">
             <div className="divider-soft"></div>
             <p className="auth-label">Login for full features (optional)</p>
-            <div className="social-login-minimal">
-              <button className="google-btn-minimal">
-                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" /> Google
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div className="login-footer">
-          <p>© 2026 TrueCare Digital Health. Secure & Encrypted.</p>
-          <div className="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Support</a>
+            <button className="google-btn-minimal" onClick={handleGoogleSignIn}>
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" />
+              <span>Sign in with Google</span>
+            </button>
           </div>
         </div>
       </div>

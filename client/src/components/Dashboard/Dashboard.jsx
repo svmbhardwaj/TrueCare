@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -48,7 +47,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-page page-container">
-      <Navbar />
 
       <main className="dashboard-main-container">
         {/* Sidebar: Search & Filters (Left) */}
@@ -64,7 +62,7 @@ const Dashboard = () => {
               <div className="filter-group">
                 <label className="filter-label">Medical Need</label>
                 <div className="select-wrapper">
-                  <select 
+                  <select
                     className="medical-select"
                     value={selectedNeed}
                     onChange={(e) => setSelectedNeed(e.target.value)}
@@ -82,17 +80,17 @@ const Dashboard = () => {
                 <label className="filter-label">Financial Coverage</label>
                 <div className="checkbox-grid">
                   <label className="checkbox-card">
-                    <input 
-                      type="checkbox" 
-                      checked={ayushmanActive} 
+                    <input
+                      type="checkbox"
+                      checked={ayushmanActive}
                       onChange={() => setAyushmanActive(!ayushmanActive)}
                     />
                     <span className="checkbox-label">Ayushman Bharat (PMJAY)</span>
                   </label>
                   <label className="checkbox-card">
-                    <input 
-                      type="checkbox" 
-                      checked={cghsActive} 
+                    <input
+                      type="checkbox"
+                      checked={cghsActive}
                       onChange={() => setCghsActive(!cghsActive)}
                     />
                     <span className="checkbox-label">CGHS Approved</span>
@@ -111,8 +109,8 @@ const Dashboard = () => {
               </div>
 
               {hospitals.map((h) => (
-                <div 
-                  key={h.id} 
+                <div
+                  key={h.id}
                   className={`hospital-card ${h.featured ? 'featured' : ''}`}
                   onClick={() => navigate(`/hospital/${h.id}`)}
                   style={{ cursor: 'pointer' }}
@@ -132,9 +130,12 @@ const Dashboard = () => {
                       </div>
                     )}
                   </div>
-                  <button 
+                  <button
                     className={`btn-action ${h.featured ? 'primary' : 'secondary'}`}
-                    onClick={() => navigate(`/hospital/${h.id}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/hospital/${h.id}`);
+                    }}
                   >
                     {h.featured ? 'Start Navigation' : 'View Details'}
                   </button>
@@ -172,9 +173,9 @@ const Dashboard = () => {
           {/* Map UI Elements */}
           <div className="map-markers-layer">
             {hospitals.map((h) => (
-              <div 
-                key={h.id} 
-                className="marker-container" 
+              <div
+                key={h.id}
+                className="marker-container"
                 style={{ top: h.top, left: h.left }}
                 onClick={() => navigate(`/hospital/${h.id}`)}
               >
@@ -189,7 +190,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
-                
+
                 <div className="pulse-wrapper">
                   {h.featured && <div className="pulse-circle"></div>}
                   <div className="marker-point"></div>

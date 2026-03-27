@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
 import heroBg from '../../assets/hero_bg.png';
 import './HomePage.css';
 
@@ -29,14 +28,13 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <Navbar />
 
       <main className="homepage-content">
         {/* Section 1: HERO */}
-        <section 
-          className="hero-section" 
-          id="hero" 
-          style={{ 
+        <section
+          className="hero-section"
+          id="hero"
+          style={{
             backgroundImage: `url(${heroBg})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
@@ -56,7 +54,7 @@ const HomePage = () => {
               <p className="hero-subtext">
                 Instantly find hospital beds, check insurance coverage, and get AI-powered bill protection. Trusted by Bharat's families.
               </p>
-              
+
               <div className="hero-cta-wrapper">
                 <button className="full-map-btn hero-map-btn" onClick={() => navigate('/dashboard')}>
                   <div className="map-icon-circle">
@@ -429,7 +427,7 @@ const HomePage = () => {
               </div>
               <div className="rating-stars">{'⭐'.repeat(testimonials[activeTestimonial].stars)}</div>
               <p className="main-quote">{testimonials[activeTestimonial].quote}</p>
-              
+
               <div className="testimonial-footer">
                 <div className="user-profile">
                   <div className="avatar">{testimonials[activeTestimonial].initials}</div>
@@ -553,7 +551,7 @@ const HomePage = () => {
             {/* Journey Comparison */}
             <div className="journey-comparison">
               <h3>Your Emergency Journey: Others vs TrueCare</h3>
-              
+
               <div className="journey-grid">
                 <div className="journey-path others">
                   <div className="path-title">
@@ -678,7 +676,8 @@ const HomePage = () => {
                   <span className="material-symbols-outlined">location_on</span>
                   Find Hospital Now
                 </button>
-                <button className="btn-secondary outline-white" onClick={() => navigate('/bill-ai')}>
+                {/* Connection Fix: Changed /bill-ai to /truebill */}
+                <button className="btn-secondary outline-white" onClick={() => navigate('/truebill')}>
                   <span className="material-symbols-outlined">qr_code_scanner</span>
                   Scan a Bill
                 </button>
@@ -696,8 +695,8 @@ const HomePage = () => {
               </div>
               <h2 className="vision-headline">The Long-Term Vision</h2>
               <p>
-                A world where no family is financially destroyed by a medical emergency. Where every 
-                patient — regardless of income, literacy, or location — has instant access to verified 
+                A world where no family is financially destroyed by a medical emergency. Where every
+                patient — regardless of income, literacy, or location — has instant access to verified
                 hospitals and transparent billing. TrueCare is the first step towards that vision.
               </p>
               <button className="btn-primary blue-cta join-mission" onClick={() => navigate('/')}>
@@ -737,7 +736,7 @@ const HomePage = () => {
                 <h4>Product</h4>
                 <ul>
                   <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>Emergency Navigator</a></li>
-                  <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/bill-ai'); }}>TrueBill AI</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/truebill'); }}>TrueBill AI</a></li>
                   <li><a href="#hero" onClick={(e) => { e.preventDefault(); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }); }}>Trust Badges</a></li>
                   <li><a href="#" onClick={(e) => { e.preventDefault(); alert('WhatsApp Bot: Launching Q3 2026. Stay tuned for real-time hospital navigation.'); }}>WhatsApp Bot</a></li>
                 </ul>
@@ -765,7 +764,7 @@ const HomePage = () => {
                 </ul>
               </div>
             </div>
-            
+
             <div className="footer-bottom">
               <p>© 2026 TrueCare India. Built with ❤️ for Bharat.</p>
               <div className="footer-legal">
