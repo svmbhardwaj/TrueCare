@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Bell, User } from 'lucide-react'; // Removing these as we switch to Material Symbols
 import './Navbar.css';
 
 const Navbar = () => {

@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard/Dashboard'
 import BillAI from './components/BillAI/BillAI'
 import BillResult from './components/BillAI/BillResult'
 import History from './components/History/History'
+import NotFound from './components/NotFound/NotFound'
 import './index.css'
 
 function App() {
@@ -17,10 +18,10 @@ function App() {
           <Route path="/hospital/:id" element={<HospitalDetails />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/details" element={<HomePage />} />
           <Route path="/bill-ai" element={<BillAI />} />
           <Route path="/bill-result" element={<BillResult />} />
           <Route path="/history" element={<History />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>
@@ -28,3 +29,4 @@ function App() {
 }
 
 export default App
+
