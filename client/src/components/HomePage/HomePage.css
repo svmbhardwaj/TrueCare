@@ -7,7 +7,7 @@
   color: var(--on-surface);
 }
 
-.container {
+.homepage .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 40px;
@@ -18,13 +18,13 @@
 }
 
 /* SECTION 1: HERO */
-.hero-section {
+.homepage .hero-section {
   padding: 120px 0;
   position: relative;
   overflow: hidden;
 }
 
-.hero-section::before {
+.homepage .hero-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -33,6 +33,7 @@
   height: 100%;
   background: rgba(255, 255, 255, 0.4); /* Light overlay for text visibility */
   z-index: 1;
+  pointer-events: none;
 }
 
 .hero-container {
@@ -1555,7 +1556,7 @@
   .grid-2-col {
     grid-template-columns: 1fr;
   }
-  .container {
+  .homepage .container {
     padding: 0 24px;
   }
   .main-emergency-btn {

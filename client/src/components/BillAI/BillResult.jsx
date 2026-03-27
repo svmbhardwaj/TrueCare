@@ -29,7 +29,6 @@ const BillResult = () => {
 
   // Get real data from navigation state (sent from BillAI page)
   const result = location.state?.result;
-  const billImage = location.state?.billImage;
 
   // If no data (user navigated here directly), show fallback
   if (!result) {
@@ -57,9 +56,8 @@ const BillResult = () => {
   }
 
   // Extract data from API response
-  const { items, summary, ocrText } = result;
+  const { items, summary, ocrText, extraction } = result;
   const flaggedItems = items?.filter(i => i.status === 'FLAGGED') || [];
-  const okItems = items?.filter(i => i.status === 'OK') || [];
 
   // Calculate total savings
   const totalSavings = items?.reduce((sum, item) => {
@@ -73,6 +71,9 @@ const BillResult = () => {
   const lineItems = items?.map(item => ({
     description: item.name,
     meta: item.reason,
+    riskScore: item.riskScore ?? 0,
+    severity: item.severity || 'none',
+    flagsCount: Array.isArray(item.flags) ? item.flags.length : 0,
     hospitalCharge: `₹${item.charged?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
     truecareCharge: item.status === 'FLAGGED' && item.expected !== item.charged
       ? `₹${item.expected?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
@@ -84,6 +85,10 @@ const BillResult = () => {
     type: item.status === 'FLAGGED' ? 'anomaly' : 'normal',
     category: item.category
   })) || [];
+
+  const extractionQuality = summary?.extractionQuality ?? extraction?.extractionQuality ?? 0;
+  const avgRiskScore = summary?.avgRiskScore ?? 0;
+  const extractionSourceLabel = extraction?.source === 'fallback' ? 'Fallback Parser' : 'GenAI Extraction';
 
   return (
     <div className="bill-result-page">
@@ -149,6 +154,29 @@ const BillResult = () => {
                   <AlertTriangle size={14} /> {summary?.flaggedItems || 0} Flagged
                 </div>
               </div>
+
+              <div className="analysis-metrics-grid">
+                <div className="metric-pill metric-pill-risk">
+                  <span>Avg Risk</span>
+                  <strong>{Number(avgRiskScore).toFixed(1)} / 100</strong>
+                </div>
+                <div className="metric-pill metric-pill-quality">
+                  <span>Extraction Quality</span>
+                  <strong>{Number(extractionQuality).toFixed(0)}%</strong>
+                </div>
+              </div>
+
+              <p className="extraction-source-label">
+                Source: {extractionSourceLabel}
+              </p>
+
+              {Array.isArray(extraction?.warnings) && extraction.warnings.length > 0 && (
+                <div className="extraction-warning-card">
+                  <AlertTriangle size={14} />
+                  <span>{extraction.warnings[0]}</span>
+                </div>
+              )}
+
               {totalSavings > 0 && (
                 <div style={{ marginTop: '0.75rem', padding: '8px 12px', background: 'rgba(239,68,68,0.08)', borderRadius: '8px' }}>
                   <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ef4444' }}>
@@ -205,6 +233,13 @@ const BillResult = () => {
                         {item.type === 'anomaly' ? <AlertTriangle size={12} /> : <CheckCircle2 size={12} />}
                         {item.status}
                       </p>
+                      <div className="risk-info-row">
+                        <span className={`risk-pill risk-pill-${item.severity}`}>
+                          {item.severity} risk
+                        </span>
+                        <span className="risk-score-text">Score: {item.riskScore}</span>
+                        {item.flagsCount > 0 && <span className="risk-flags-count">{item.flagsCount} flags</span>}
+                      </div>
                     </div>
                   </div>
                 </div>

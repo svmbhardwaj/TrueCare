@@ -225,7 +225,6 @@ const BillAI = () => {
                     const StepIcon = step.icon;
                     const isActive = loadingStep === i + 1;
                     const isDone = loadingStep > i + 1;
-                    const isPending = loadingStep < i + 1;
                     return (
                       <div key={i} className={`pipeline-step ${isDone ? 'done' : isActive ? 'active' : 'pending'}`}>
                         <div className="pipeline-icon">

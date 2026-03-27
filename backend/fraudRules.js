@@ -1,134 +1,19 @@
-// ============================================================
-// FRAUD DETECTION ENGINE — fraudRules.js
-// ============================================================
-// This file contains simple "if-then" rules to catch suspicious
-// charges on hospital/pharmacy bills. No ML needed!
-//
-// HOW IT WORKS:
-//   Each rule is a function that looks at a bill item and says
-//   "This looks suspicious" or "This looks OK".
-//   Think of it like a checklist a doctor would use.
-// ============================================================
+const SEVERITY_WEIGHT = {
+  low: 12,
+  medium: 30,
+  high: 55,
+};
 
-/**
- * Rule 1: GST on Medicines
- * -------------------------------------------------
- * In India, essential medicines are either GST-exempt or
- * taxed at 5%. If a bill charges 12-18% GST on medicine,
- * that's suspicious.
- */
-function checkGSTRule(item) {
-  const name = item.item.toLowerCase();
-  const category = item.category.toLowerCase();
-
-  // Check if the item name mentions GST/tax AND category is medicine
-  if (category === 'medicine') {
-    // Look for GST mentions in item name or if there's a separate GST line
-    if (name.includes('gst') || name.includes('tax') || name.includes('cgst') || name.includes('sgst')) {
-      return {
-        flagged: true,
-        reason: 'GST/tax applied on medicine — medicines are often GST-exempt or taxed at only 5%',
-      };
-    }
-  }
-
-  return { flagged: false };
-}
-
-/**
- * Rule 2: Duplicate Items
- * -------------------------------------------------
- * If the same item appears more than once in a bill,
- * it might be an accidental (or intentional) duplicate charge.
- */
-function checkDuplicateRule(item, allItems) {
-  const itemName = item.item.toLowerCase().trim();
-
-  // Count how many times this exact item appears
-  const count = allItems.filter(
-    (i) => i.item.toLowerCase().trim() === itemName
-  ).length;
-
-  if (count > 1) {
-    return {
-      flagged: true,
-      reason: `Duplicate charge — "${item.item}" appears ${count} times in the bill`,
-    };
-  }
-
-  return { flagged: false };
-}
-
-/**
- * Rule 3: Consumable Price Check
- * -------------------------------------------------
- * Common consumables like gloves and syringes have known
- * market prices. If the bill charges way more, it's suspicious.
- *
- * EXPECTED PRICES (approx):
- *   Gloves: ₹5–20 per pair → flag if > ₹100
- *   Syringe: ₹10–30 each → flag if > ₹100
- *   Mask: ₹5–15 each → flag if > ₹80
- *   Cotton/Gauze: ₹10–30 → flag if > ₹100
- */
-const consumableLimits = [
-  { keyword: 'glove', maxPrice: 100, expected: '₹5–20 per pair' },
-  { keyword: 'syringe', maxPrice: 100, expected: '₹10–30 each' },
-  { keyword: 'mask', maxPrice: 80, expected: '₹5–15 each' },
-  { keyword: 'cotton', maxPrice: 100, expected: '₹10–30' },
-  { keyword: 'gauze', maxPrice: 100, expected: '₹10–30' },
-  { keyword: 'bandage', maxPrice: 150, expected: '₹20–50' },
+const CONSUMABLE_LIMITS = [
+  { keyword: 'glove', maxPrice: 100, expected: 'Rs 5-20 per pair' },
+  { keyword: 'syringe', maxPrice: 100, expected: 'Rs 10-30 each' },
+  { keyword: 'mask', maxPrice: 80, expected: 'Rs 5-15 each' },
+  { keyword: 'cotton', maxPrice: 100, expected: 'Rs 10-30' },
+  { keyword: 'gauze', maxPrice: 100, expected: 'Rs 10-30' },
+  { keyword: 'bandage', maxPrice: 150, expected: 'Rs 20-50' },
 ];
 
-function checkConsumablePriceRule(item) {
-  const name = item.item.toLowerCase();
-  const price = parseFloat(item.price) || 0;
-  const category = item.category.toLowerCase();
-
-  if (category === 'consumable' || category === 'medicine') {
-    for (const limit of consumableLimits) {
-      if (name.includes(limit.keyword) && price > limit.maxPrice) {
-        return {
-          flagged: true,
-          reason: `Overpriced consumable — "${item.item}" charged ₹${price}, expected ${limit.expected}`,
-          expectedPrice: limit.maxPrice,
-        };
-      }
-    }
-  }
-
-  return { flagged: false };
-}
-
-/**
- * Rule 4: Room Rent Check
- * -------------------------------------------------
- * Standard hospital rooms typically cost ₹1000–3000/day.
- * If the bill shows > ₹3000/day, it should be flagged.
- */
-function checkRoomRentRule(item) {
-  const category = item.category.toLowerCase();
-  const price = parseFloat(item.price) || 0;
-
-  if (category === 'room' && price > 3000) {
-    return {
-      flagged: true,
-      reason: `High room rent — ₹${price}/day charged, standard is ₹1000–3000/day`,
-      expectedPrice: 3000,
-    };
-  }
-
-  return { flagged: false };
-}
-
-/**
- * Rule 5: Suspicious Charges (Verify Usage)
- * -------------------------------------------------
- * Some charges like Oxygen, ICU, ventilator are legitimate
- * but VERY expensive. We flag them so the patient can verify
- * they actually received these services.
- */
-const suspiciousKeywords = [
+const SUSPICIOUS_KEYWORDS = [
   'oxygen',
   'icu',
   'ventilator',
@@ -139,65 +24,238 @@ const suspiciousKeywords = [
   'emergency',
 ];
 
-function checkSuspiciousCharges(item) {
-  const name = item.item.toLowerCase();
+function parseAmount(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return Math.max(0, value);
+  }
 
-  for (const keyword of suspiciousKeywords) {
-    if (name.includes(keyword)) {
-      return {
-        flagged: true,
-        reason: `High-cost item — please verify "${item.item}" was actually used/provided`,
-      };
+  if (typeof value !== 'string') {
+    return 0;
+  }
+
+  const compact = value
+    .replace(/inr|rs\.?|rupees?|,/gi, '')
+    .replace(/[^0-9.-]/g, '')
+    .trim();
+
+  const parsed = Number.parseFloat(compact);
+  return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+}
+
+function normalizeText(value) {
+  return String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function normalizeCategory(category) {
+  const value = normalizeText(category);
+  if (!value) {
+    return 'other';
+  }
+
+  const allowed = new Set(['medicine', 'room', 'consultation', 'procedure', 'consumable', 'tax', 'other']);
+  return allowed.has(value) ? value : 'other';
+}
+
+function buildDuplicateMap(items) {
+  const counts = new Map();
+  for (const item of items) {
+    const key = normalizeText(item.name).replace(/[^a-z0-9 ]/g, '');
+    if (!key) {
+      continue;
+    }
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+function addFlag(flags, ruleId, severity, reason, expectedPrice) {
+  flags.push({ ruleId, severity, reason, expectedPrice });
+}
+
+function ruleGSTOnMedicine(item, flags) {
+  const name = normalizeText(item.name);
+  if (item.category === 'medicine' && /(gst|tax|cgst|sgst|igst)/.test(name)) {
+    addFlag(
+      flags,
+      'gst_on_medicine',
+      'high',
+      'GST/tax appears to be charged on medicine line item; verify applicable slab and exemption.',
+      item.charged
+    );
+  }
+}
+
+function ruleDuplicateCharge(item, duplicateMap, flags) {
+  const key = normalizeText(item.name).replace(/[^a-z0-9 ]/g, '');
+  const count = duplicateMap.get(key) || 0;
+
+  if (count > 1) {
+    addFlag(
+      flags,
+      'duplicate_item',
+      'medium',
+      `Possible duplicate charge: "${item.name}" appears ${count} times.`,
+      item.charged
+    );
+  }
+}
+
+function ruleConsumablePrice(item, flags) {
+  const name = normalizeText(item.name);
+  if (item.category !== 'consumable' && item.category !== 'medicine') {
+    return;
+  }
+
+  for (const limit of CONSUMABLE_LIMITS) {
+    if (name.includes(limit.keyword) && item.charged > limit.maxPrice) {
+      addFlag(
+        flags,
+        'consumable_overprice',
+        'high',
+        `Overpriced consumable: "${item.name}" charged Rs ${item.charged.toFixed(2)}, expected ${limit.expected}.`,
+        limit.maxPrice
+      );
+      return;
+    }
+  }
+}
+
+function ruleRoomRent(item, flags) {
+  if (item.category !== 'room') {
+    return;
+  }
+
+  if (item.charged > 5000) {
+    addFlag(flags, 'room_rent_high', 'high', `Room rent is unusually high at Rs ${item.charged.toFixed(2)} per day.`, 3000);
+  } else if (item.charged > 3000) {
+    addFlag(flags, 'room_rent_elevated', 'medium', `Room rent is above typical range at Rs ${item.charged.toFixed(2)} per day.`, 3000);
+  }
+}
+
+function ruleSuspiciousUsage(item, flags) {
+  const name = normalizeText(item.name);
+  if (SUSPICIOUS_KEYWORDS.some((keyword) => name.includes(keyword))) {
+    addFlag(
+      flags,
+      'high_cost_verification',
+      'low',
+      `High-cost service/item detected: verify if "${item.name}" was actually administered or used.`,
+      item.charged
+    );
+  }
+}
+
+function ruleTaxRate(item, context, flags) {
+  const name = normalizeText(item.name);
+  const isTaxLine = item.category === 'tax' || /(gst|tax|cgst|sgst|igst)/.test(name);
+  if (!isTaxLine) {
+    return;
+  }
+
+  const percentMatch = name.match(/(\d+(?:\.\d+)?)\s*%/);
+  if (percentMatch) {
+    const rate = Number.parseFloat(percentMatch[1]);
+    if (Number.isFinite(rate) && rate > 18) {
+      addFlag(
+        flags,
+        'tax_percent_high',
+        'high',
+        `Tax percentage ${rate}% exceeds common healthcare GST slabs.`,
+        item.charged
+      );
+      return;
     }
   }
 
-  return { flagged: false };
+  if (context.subtotalWithoutTax > 0) {
+    const inferredRate = (item.charged / context.subtotalWithoutTax) * 100;
+    if (inferredRate > 28) {
+      addFlag(
+        flags,
+        'tax_amount_high',
+        'high',
+        `Tax amount implies ~${inferredRate.toFixed(1)}% of non-tax subtotal; please verify slab and base amount.`,
+        item.charged
+      );
+    } else if (inferredRate > 18) {
+      addFlag(
+        flags,
+        'tax_amount_elevated',
+        'medium',
+        `Tax amount implies ~${inferredRate.toFixed(1)}%, which is higher than common healthcare GST rates.`,
+        item.charged
+      );
+    }
+  }
 }
 
-// ============================================================
-// MAIN FUNCTION: Run ALL rules on ALL items
-// ============================================================
-// This is the function we call from server.js
-// It takes the array of bill items and returns each item
-// with a status (OK or FLAGGED) and reason.
-// ============================================================
+function classifySeverity(flags) {
+  if (flags.some((flag) => flag.severity === 'high')) {
+    return 'high';
+  }
+  if (flags.some((flag) => flag.severity === 'medium')) {
+    return 'medium';
+  }
+  if (flags.some((flag) => flag.severity === 'low')) {
+    return 'low';
+  }
+  return 'none';
+}
+
+function computeRiskScore(flags) {
+  if (!flags.length) {
+    return 0;
+  }
+
+  const base = flags.reduce((sum, flag) => sum + (SEVERITY_WEIGHT[flag.severity] || 0), 0);
+  const combinedPenalty = Math.max(0, flags.length - 1) * 8;
+  return Math.min(100, base + combinedPenalty);
+}
 
 function runFraudDetection(items) {
-  return items.map((item) => {
-    // Collect all flags for this item
+  const normalizedItems = (Array.isArray(items) ? items : []).map((item) => ({
+    name: String(item?.item ?? item?.name ?? 'Unknown Item').trim() || 'Unknown Item',
+    category: normalizeCategory(item?.category),
+    charged: parseAmount(item?.price ?? item?.charged ?? item?.amount ?? 0),
+  }));
+
+  const duplicateMap = buildDuplicateMap(normalizedItems);
+  const subtotalWithoutTax = normalizedItems
+    .filter((item) => item.category !== 'tax')
+    .reduce((sum, item) => sum + item.charged, 0);
+
+  const context = { subtotalWithoutTax };
+
+  return normalizedItems.map((item) => {
     const flags = [];
-    let expectedPrice = null;
 
-    // Run each rule
-    const gst = checkGSTRule(item);
-    if (gst.flagged) flags.push(gst.reason);
+    ruleGSTOnMedicine(item, flags);
+    ruleDuplicateCharge(item, duplicateMap, flags);
+    ruleConsumablePrice(item, flags);
+    ruleRoomRent(item, flags);
+    ruleSuspiciousUsage(item, flags);
+    ruleTaxRate(item, context, flags);
 
-    const duplicate = checkDuplicateRule(item, items);
-    if (duplicate.flagged) flags.push(duplicate.reason);
+    const riskScore = computeRiskScore(flags);
+    const severity = classifySeverity(flags);
 
-    const consumable = checkConsumablePriceRule(item);
-    if (consumable.flagged) {
-      flags.push(consumable.reason);
-      expectedPrice = consumable.expectedPrice;
+    let expected = item.charged;
+    for (const flag of flags) {
+      if (typeof flag.expectedPrice === 'number' && flag.expectedPrice < expected) {
+        expected = flag.expectedPrice;
+      }
     }
 
-    const room = checkRoomRentRule(item);
-    if (room.flagged) {
-      flags.push(room.reason);
-      expectedPrice = room.expectedPrice;
-    }
-
-    const suspicious = checkSuspiciousCharges(item);
-    if (suspicious.flagged) flags.push(suspicious.reason);
-
-    // Build the result
     return {
-      name: item.item,
+      name: item.name,
       category: item.category,
-      charged: parseFloat(item.price) || 0,
-      expected: expectedPrice || parseFloat(item.price) || 0,
-      status: flags.length > 0 ? 'FLAGGED' : 'OK',
-      reason: flags.length > 0 ? flags.join(' | ') : 'No issues found',
+      charged: item.charged,
+      expected,
+      status: riskScore >= 25 ? 'FLAGGED' : 'OK',
+      severity,
+      riskScore,
+      reason: flags.length ? flags.map((flag) => flag.reason).join(' | ') : 'No issues found',
+      flags,
     };
   });
 }

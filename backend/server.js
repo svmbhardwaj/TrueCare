@@ -31,6 +31,7 @@ const pdfParse = require('pdf-parse');    // Extracts text from PDF files
 
 // --- Import our fraud detection rules ---
 const { runFraudDetection } = require('./fraudRules');
+const { extractBillItemsWithAI, computeExtractionMetrics } = require('./analysisEngine');
 
 // ============================================================
 // SETUP
@@ -186,64 +187,20 @@ app.post('/analyze', async (req, res) => {
       return res.status(400).json({ error: 'Please provide OCR text!' });
     }
 
-    console.log('🤖 Sending to LLM for analysis...');
+    console.log('🤖 Running hybrid extraction (GenAI + deterministic fallback)...');
+    const extraction = await extractBillItemsWithAI({ groq, text });
+    const metrics = computeExtractionMetrics(extraction.items);
 
-    // The prompt tells the LLM exactly what we want
-    const prompt = `You are a medical bill analysis expert. Convert the following hospital/pharmacy bill text into structured JSON.
-
-RULES:
-1. Extract EVERY line item from the bill
-2. Each item must have exactly these fields:
-   - "item": the name of the item/service (string)
-   - "price": the price charged (number only, no currency symbols)
-   - "category": one of these EXACT categories:
-     * "medicine" — tablets, injections, syrups, drugs
-     * "room" — room rent, bed charges, ward charges
-     * "consultation" — doctor fees, visit charges, specialist fees
-     * "procedure" — surgery, operation, X-ray, MRI, CT scan, lab tests, blood tests
-     * "consumable" — gloves, syringe, cotton, gauze, bandage, mask
-     * "tax" — GST, CGST, SGST, service tax, any tax item
-     * "other" — anything that doesn't fit above
-
-3. If price is not clear, estimate from context or use 0
-4. Return ONLY valid JSON array, no explanations, no markdown, no code fences
-
-BILL TEXT:
-${text}
-
-RESPOND WITH ONLY THE JSON ARRAY:`;
-
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
-      model: 'llama-3.3-70b-versatile', // Free, fast, and smart
-      temperature: 0.1, // Low = more consistent/accurate results
-      max_tokens: 4096,
-    });
-
-    const llmResponse = chatCompletion.choices[0].message.content;
-
-    // Try to parse the JSON response
-    let items;
-    try {
-      // Clean the response in case LLM wraps it in markdown
-      let cleanResponse = llmResponse.trim();
-      if (cleanResponse.startsWith('```')) {
-        cleanResponse = cleanResponse.replace(/```json?\n?/g, '').replace(/```/g, '');
-      }
-      items = JSON.parse(cleanResponse.trim());
-    } catch (parseError) {
-      console.error('⚠️ LLM response was not valid JSON:', llmResponse);
-      return res.status(500).json({
-        error: 'LLM did not return valid JSON',
-        rawResponse: llmResponse,
-      });
-    }
-
-    console.log('✅ LLM analysis complete!', items.length, 'items found');
+    console.log('✅ Extraction complete!', extraction.items.length, 'items found');
 
     res.json({
       message: '✅ Bill analyzed!',
-      items,
+      items: extraction.items,
+      extraction: {
+        source: extraction.source,
+        warnings: extraction.warnings,
+        ...metrics,
+      },
     });
   } catch (error) {
     console.error('❌ LLM Error:', error.message);
@@ -301,57 +258,20 @@ app.post('/analyze-bill', upload.single('billImage'), async (req, res) => {
       console.log('✅ OCR done!', ocrText.length, 'characters extracted');
     }
 
-    // STEP 3: Send to LLM
-    console.log('\n🤖 Step 2/3: Analyzing with AI...');
-    const prompt = `You are a medical bill analysis expert. Convert the following hospital/pharmacy bill text into structured JSON.
+    // STEP 3: Extract items via hybrid AI pipeline
+    console.log('\n🤖 Step 2/3: Extracting line items with hybrid AI...');
+    const extraction = await extractBillItemsWithAI({ groq, text: ocrText });
+    const items = extraction.items;
 
-RULES:
-1. Extract EVERY line item from the bill
-2. Each item must have exactly these fields:
-   - "item": the name of the item/service (string)
-   - "price": the price charged (number only, no currency symbols)
-   - "category": one of these EXACT categories:
-     * "medicine" — tablets, injections, syrups, drugs
-     * "room" — room rent, bed charges, ward charges
-     * "consultation" — doctor fees, visit charges, specialist fees
-     * "procedure" — surgery, operation, X-ray, MRI, CT scan, lab tests, blood tests
-     * "consumable" — gloves, syringe, cotton, gauze, bandage, mask
-     * "tax" — GST, CGST, SGST, service tax, any tax item
-     * "other" — anything that doesn't fit above
-
-3. If price is not clear, estimate from context or use 0
-4. Return ONLY valid JSON array, no explanations, no markdown, no code fences
-
-BILL TEXT:
-${ocrText}
-
-RESPOND WITH ONLY THE JSON ARRAY:`;
-
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
-      model: 'llama-3.3-70b-versatile',
-      temperature: 0.1,
-      max_tokens: 4096,
-    });
-
-    let llmResponse = chatCompletion.choices[0].message.content.trim();
-    if (llmResponse.startsWith('```')) {
-      llmResponse = llmResponse.replace(/```json?\n?/g, '').replace(/```/g, '');
-    }
-
-    let items;
-    try {
-      items = JSON.parse(llmResponse.trim());
-    } catch {
-      console.error('⚠️ LLM response was not valid JSON');
-      return res.status(500).json({
-        error: 'Could not parse bill data from AI',
+    if (!items.length) {
+      return res.status(422).json({
+        error: 'No bill line items could be extracted from this document',
         ocrText,
-        rawLLMResponse: llmResponse,
+        extraction,
       });
     }
 
-    console.log('✅ AI found', items.length, 'items');
+    console.log('✅ Extraction found', items.length, 'items');
 
     // STEP 4: Run fraud detection
     console.log('\n🔎 Step 3/3: Running fraud detection...');
@@ -359,6 +279,9 @@ RESPOND WITH ONLY THE JSON ARRAY:`;
 
     const flaggedCount = results.filter((r) => r.status === 'FLAGGED').length;
     const totalCharged = results.reduce((sum, r) => sum + r.charged, 0);
+    const totalRiskScore = results.reduce((sum, r) => sum + (r.riskScore || 0), 0);
+    const avgRiskScore = results.length ? Number((totalRiskScore / results.length).toFixed(2)) : 0;
+    const extractionMetrics = computeExtractionMetrics(items);
 
     console.log('✅ Fraud check done!');
     console.log(`   📊 ${results.length} items analyzed`);
@@ -377,6 +300,13 @@ RESPOND WITH ONLY THE JSON ARRAY:`;
         flaggedItems: flaggedCount,
         okItems: results.length - flaggedCount,
         totalCharged,
+        avgRiskScore,
+        extractionQuality: extractionMetrics.extractionQuality,
+      },
+      extraction: {
+        source: extraction.source,
+        warnings: extraction.warnings,
+        ...extractionMetrics,
       },
       ocrText,
       items: results,

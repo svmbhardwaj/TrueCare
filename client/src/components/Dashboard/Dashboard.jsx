@@ -3,7 +3,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import './Dashboard.css';
 
-const Dashboard = ({ onBackToHome }) => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const [selectedNeed, setSelectedNeed] = useState('Trauma / Emergency');
   const [ayushmanActive, setAyushmanActive] = useState(true);
