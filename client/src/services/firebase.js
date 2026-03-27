@@ -2,7 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBrXvItD7UJdPCXUB7B1y5dm6wYqaKiBEo",
+    // This line pulls the key from your .env file
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: "truecare-61ef3.firebaseapp.com",
     projectId: "truecare-61ef3",
     storageBucket: "truecare-61ef3.firebasestorage.app",
