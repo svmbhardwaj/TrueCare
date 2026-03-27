@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import heroBg from '../../assets/hero_bg.png';
@@ -6,6 +6,26 @@ import './HomePage.css';
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [openFaq, setOpenFaq] = useState(null);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  const testimonials = [
+    { quote: '"When my father was in an emergency, I had no idea which hospital would accept CGHS. TrueCare navigated us through the entire process seamlessly."', name: 'Suresh Patel', role: 'Small Business Owner, Ahmedabad', initials: 'SP', badge: 'Emergency resolved', stars: 5 },
+    { quote: '"At 1 AM, my mother had a cardiac episode. TrueCare showed the nearest hospital that accepted our Ayushman card. We saved ₹2.3 lakhs in out-of-pocket costs."', name: 'Priya Sharma', role: 'Teacher, Delhi', initials: 'PS', badge: 'Savings: ₹2.3L', stars: 5 },
+    { quote: '"The TrueBill scanner found ₹8,400 in overcharges on my wife\'s maternity bill. The pharmacy had inflated MRPs on basic medicines by 300%."', name: 'Rahul Mehta', role: 'IT Professional, Mumbai', initials: 'RM', badge: 'Overcharge caught', stars: 5 },
+    { quote: '"After my accident, family used TrueCare to find an orthopedic hospital that took CGHS cashless. The community badges helped them trust the hospital choice."', name: 'Anjali Gupta', role: 'Software Engineer, Bangalore', initials: 'AG', badge: 'Insurance verified', stars: 4 },
+  ];
+
+  const nextTestimonial = () => setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  const prevTestimonial = () => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+
+  const faqs = [
+    { q: 'How does TrueCare find hospitals so fast?', a: 'We maintain a real-time database of hospitals filtered by medical specialty, bed availability, and insurance/scheme acceptance. When you select your need, we instantly match you to the nearest verified hospital.' },
+    { q: 'Is TrueCare free to use?', a: 'Yes, completely free for all patients. Our mission is to ensure no family faces financial shock during a medical emergency. There are no hidden charges, subscriptions, or premium tiers.' },
+    { q: 'How does the AI Bill Scanner work?', a: 'You upload a photo or PDF of your hospital bill. Our OCR engine extracts every line item, then our AI cross-references prices against NPPA guidelines and state-mandated caps to detect overcharges.' },
+    { q: 'What insurance schemes are supported?', a: 'We support Ayushman Bharat (PMJAY), CGHS, ECHS, ESI, and 15+ major private insurers including Star Health, ICICI Lombard, and HDFC Ergo. We verify hospital empanelment in real-time.' },
+    { q: 'How are Trust Badges earned by hospitals?', a: 'When patients confirm a hospital successfully processed their insurance without hassle, it earns trust points. Hospitals with consistently positive reports earn Platinum, Gold, or Silver community badges.' },
+  ];
 
   return (
     <div className="homepage">
@@ -15,6 +35,7 @@ const HomePage = () => {
         {/* Section 1: HERO */}
         <section 
           className="hero-section" 
+          id="hero" 
           style={{ 
             backgroundImage: `url(${heroBg})`,
             backgroundRepeat: 'no-repeat',
@@ -402,39 +423,42 @@ const HomePage = () => {
               <p>Real people, real savings, real impact on healthcare transparency.</p>
             </div>
 
-            <div className="testimonial-main-card">
+            <div className="testimonial-main-card" key={activeTestimonial}>
               <div className="quote-icon">
                 <span className="material-symbols-outlined">format_quote</span>
               </div>
-              <div className="rating-stars">⭐⭐⭐⭐⭐</div>
-              <p className="main-quote">"When my father was in an emergency, I had no idea which hospital would accept CGHS. TrueCare navigated us through the entire process seamlessly."</p>
+              <div className="rating-stars">{'⭐'.repeat(testimonials[activeTestimonial].stars)}</div>
+              <p className="main-quote">{testimonials[activeTestimonial].quote}</p>
               
               <div className="testimonial-footer">
                 <div className="user-profile">
-                  <div className="avatar">SP</div>
+                  <div className="avatar">{testimonials[activeTestimonial].initials}</div>
                   <div className="details">
-                    <strong>Suresh Patel</strong>
-                    <span>Small Business Owner, Ahmedabad</span>
+                    <strong>{testimonials[activeTestimonial].name}</strong>
+                    <span>{testimonials[activeTestimonial].role}</span>
                   </div>
                 </div>
                 <div className="resolved-badge">
                   <span className="dot"></span>
-                  Emergency resolved
+                  {testimonials[activeTestimonial].badge}
                 </div>
               </div>
             </div>
 
             <div className="slider-controls">
-              <button className="slider-btn prev">
+              <button className="slider-btn prev" onClick={prevTestimonial}>
                 <span className="material-symbols-outlined">chevron_left</span>
               </button>
               <div className="slider-dots">
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot active"></span>
-                <span className="dot"></span>
+                {testimonials.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`dot ${i === activeTestimonial ? 'active' : ''}`}
+                    onClick={() => setActiveTestimonial(i)}
+                  ></span>
+                ))}
               </div>
-              <button className="slider-btn next">
+              <button className="slider-btn next" onClick={nextTestimonial}>
                 <span className="material-symbols-outlined">chevron_right</span>
               </button>
             </div>
@@ -615,19 +639,30 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Section 7: FAQ PROMPT */}
-        <section className="faq-section">
+        {/* Section 7: FAQ */}
+        <section className="faq-section" id="faq">
           <div className="container">
-            <div className="faq-card">
+            <div className="faq-header">
               <span className="faq-small-badge">
                 <span className="material-symbols-outlined">help_outline</span> FAQ
               </span>
               <h2 className="faq-headline">Frequently Asked <span className="text-highlight-blue">Questions</span></h2>
               <p>Everything you need to know about TrueCare and how it protects your family.</p>
-              <div className="faq-expand-prompt">
-                <span>Click to expand</span>
-                <span className="material-symbols-outlined">expand_more</span>
-              </div>
+            </div>
+            <div className="faq-list">
+              {faqs.map((faq, i) => (
+                <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
+                  <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                    <span>{faq.q}</span>
+                    <span className="material-symbols-outlined faq-chevron">
+                      {openFaq === i ? 'expand_less' : 'expand_more'}
+                    </span>
+                  </button>
+                  <div className="faq-answer">
+                    <p>{faq.a}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -643,7 +678,7 @@ const HomePage = () => {
                   <span className="material-symbols-outlined">location_on</span>
                   Find Hospital Now
                 </button>
-                <button className="btn-secondary outline-white">
+                <button className="btn-secondary outline-white" onClick={() => navigate('/bill-ai')}>
                   <span className="material-symbols-outlined">qr_code_scanner</span>
                   Scan a Bill
                 </button>
@@ -653,7 +688,7 @@ const HomePage = () => {
         </section>
 
         {/* Section 9: LONG-TERM VISION */}
-        <section className="vision-section">
+        <section className="vision-section" id="vision">
           <div className="container">
             <div className="vision-card">
               <div className="vision-icon-circle">
@@ -665,7 +700,7 @@ const HomePage = () => {
                 patient — regardless of income, literacy, or location — has instant access to verified 
                 hospitals and transparent billing. TrueCare is the first step towards that vision.
               </p>
-              <button className="btn-primary blue-cta join-mission">
+              <button className="btn-primary blue-cta join-mission" onClick={() => navigate('/')}>
                 <span className="material-symbols-outlined">favorite</span>
                 Join the Mission
                 <span className="material-symbols-outlined arrow">north_east</span>
@@ -690,10 +725,10 @@ const HomePage = () => {
                   An end-to-end medical & financial lifeline platform that protects patients from emergency to discharge.
                 </p>
                 <div className="social-links">
-                  <a href="#" className="social-btn"><span className="material-symbols-outlined">code</span></a>
-                  <a href="#" className="social-btn"><span className="material-symbols-outlined">share</span></a>
-                  <a href="#" className="social-btn"><span className="material-symbols-outlined">groups</span></a>
-                  <a href="#" className="social-btn"><span className="material-symbols-outlined">mail</span></a>
+                  <a href="#" className="social-btn" onClick={(e) => { e.preventDefault(); alert('Twitter: Follow @TrueCareIndia for real-time patient rights updates.'); }}><span className="material-symbols-outlined">code</span></a>
+                  <a href="#" className="social-btn" onClick={(e) => { e.preventDefault(); alert('LinkedIn: Join the professional network for medical financial transparency.'); }}><span className="material-symbols-outlined">share</span></a>
+                  <a href="#" className="social-btn" onClick={(e) => { e.preventDefault(); alert('Community: Join our Bharat Health Mission on WhatsApp.'); }}><span className="material-symbols-outlined">groups</span></a>
+                  <a href="#" className="social-btn" onClick={(e) => { e.preventDefault(); alert('Mail: Reach us at mission@truecare.org.in for partnership queries.'); }}><span className="material-symbols-outlined">mail</span></a>
                 </div>
               </div>
 
@@ -701,10 +736,10 @@ const HomePage = () => {
               <div className="footer-links">
                 <h4>Product</h4>
                 <ul>
-                  <li><a href="#">Emergency Navigator</a></li>
-                  <li><a href="#">TrueBill AI</a></li>
-                  <li><a href="#">Trust Badges</a></li>
-                  <li><a href="#">WhatsApp Bot</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>Emergency Navigator</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/bill-ai'); }}>TrueBill AI</a></li>
+                  <li><a href="#hero" onClick={(e) => { e.preventDefault(); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }); }}>Trust Badges</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); alert('WhatsApp Bot: Launching Q3 2026. Stay tuned for real-time hospital navigation.'); }}>WhatsApp Bot</a></li>
                 </ul>
               </div>
 
@@ -712,10 +747,10 @@ const HomePage = () => {
               <div className="footer-links">
                 <h4>Resources</h4>
                 <ul>
-                  <li><a href="#">How it Works</a></li>
-                  <li><a href="#">Ayushman Bharat Info</a></li>
-                  <li><a href="#">CGHS Guidelines</a></li>
-                  <li><a href="#">GST on Healthcare</a></li>
+                  <li><a href="#hero" onClick={(e) => { e.preventDefault(); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }); }}>How it Works</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); window.open('https://pmjay.gov.in/', '_blank'); }}>Ayushman Bharat Info</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); window.open('https://cghs.nic.in/', '_blank'); }}>CGHS Guidelines</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); alert('Educational Series: GST on Healthcare. Coming soon to help you understand your billing rights.'); }}>GST on Healthcare</a></li>
                 </ul>
               </div>
 
@@ -723,10 +758,10 @@ const HomePage = () => {
               <div className="footer-links">
                 <h4>Company</h4>
                 <ul>
-                  <li><a href="#">About Us</a></li>
-                  <li><a href="#">Our Mission</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Terms of Service</a></li>
+                  <li><a href="#vision" onClick={(e) => { e.preventDefault(); document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' }); }}>About Us</a></li>
+                  <li><a href="#vision" onClick={(e) => { e.preventDefault(); document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' }); }}>Our Mission</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy Policy: Your data is encrypted and handled according to DISHA guidelines. Full policy coming soon.'); }}>Privacy Policy</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); alert('Terms of Service: By using TrueCare, you agree to our emergency-first usage policy. Full terms coming soon.'); }}>Terms of Service</a></li>
                 </ul>
               </div>
             </div>

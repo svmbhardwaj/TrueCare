@@ -47,7 +47,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-page">
+    <div className="dashboard-page page-container">
       <Navbar />
 
       <main className="dashboard-main-container">

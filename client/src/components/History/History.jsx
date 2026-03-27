@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   FileText, 
   MapPin, 
@@ -11,6 +12,9 @@ import Navbar from '../Navbar/Navbar';
 import './History.css';
 
 const History = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+
   const historyItems = [
     {
       id: 1,
@@ -44,6 +48,23 @@ const History = () => {
     }
   ];
 
+  const filteredHistoryItems = historyItems.filter(item => 
+    item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    item.type.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleExport = () => {
+    alert('Generating your comprehensive Annual Care Report (PDF)... Please wait.');
+  };
+
+  const handleItemClick = (item) => {
+    if (item.type === 'Bill Audit') {
+      navigate('/bill-result');
+    } else {
+      navigate('/hospital/1');
+    }
+  };
+
   return (
     <div className="history-page page-container">
       <Navbar />
@@ -57,7 +78,12 @@ const History = () => {
           <div className="history-actions">
             <div className="search-bar">
               <Search size={18} />
-              <input type="text" placeholder="Search history..." />
+              <input 
+                type="text" 
+                placeholder="Search history..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
             <button className="btn-filter">
               <Filter size={18} /> Filter
@@ -66,44 +92,53 @@ const History = () => {
         </header>
 
         <section className="history-list">
-          {historyItems.map((item) => (
-            <div key={item.id} className="history-card">
-              <div className="card-left">
-                <div className="item-icon-bg">
-                  {item.icon}
+          {filteredHistoryItems.length > 0 ? (
+            filteredHistoryItems.map((item) => (
+              <div key={item.id} className="history-card" onClick={() => handleItemClick(item)}>
+                <div className="card-left">
+                  <div className="item-icon-bg">
+                    {item.icon}
+                  </div>
+                  <div className="item-details">
+                     <span className="item-type">{item.type}</span>
+                     <h3>{item.title}</h3>
+                     <p className="item-date">{item.date}</p>
+                  </div>
                 </div>
-                <div className="item-details">
-                   <span className="item-type">{item.type}</span>
-                   <h3>{item.title}</h3>
-                   <p className="item-date">{item.date}</p>
+                
+                <div className="card-middle">
+                  <div className="item-stat">
+                    <span className="stat-label">Value</span>
+                    <p className="stat-value">{item.amount}</p>
+                  </div>
+                  <div className="item-stat">
+                    <span className="stat-label">Outcome</span>
+                    <p className="stat-value outcome-highlight">{item.outcome}</p>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="card-middle">
-                <div className="item-stat">
-                  <span className="stat-label">Value</span>
-                  <p className="stat-value">{item.amount}</p>
-                </div>
-                <div className="item-stat">
-                  <span className="stat-label">Outcome</span>
-                  <p className="stat-value outcome-highlight">{item.outcome}</p>
-                </div>
-              </div>
 
-              <div className="card-right">
-                <span className={`status-tag ${item.status.toLowerCase().replace(' ', '-')}`}>
-                  {item.status}
-                </span>
-                <button className="btn-icon-round">
-                   <ChevronRight size={18} />
-                </button>
+                <div className="card-right">
+                  <span className={`status-tag ${item.status.toLowerCase().replace(' ', '-')}`}>
+                    {item.status}
+                  </span>
+                  <button className="btn-icon-round">
+                     <ChevronRight size={18} />
+                  </button>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="no-results">
+              <p>No history items found matching your search.</p>
+              <button className="btn-text" onClick={() => setSearchTerm('')}>
+                Clear search
+              </button>
             </div>
-          ))}
+          )}
         </section>
 
         <footer className="history-footer">
-           <button className="btn-export-full">
+           <button className="btn-export-full" onClick={handleExport}>
              <Download size={18} /> Export Full Annual Report (PDF)
            </button>
         </footer>

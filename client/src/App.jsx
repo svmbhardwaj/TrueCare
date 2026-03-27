@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard/Dashboard'
 import BillAI from './components/BillAI/BillAI'
 import BillResult from './components/BillAI/BillResult'
 import History from './components/History/History'
+import NotFound from './components/NotFound/NotFound'
 import './index.css'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/bill-ai" element={<Navigate to="/truebill" replace />} />
           <Route path="/bill-result" element={<Navigate to="/truebill/result" replace />} />
           <Route path="/history" element={<History />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>
@@ -30,3 +32,4 @@ function App() {
 }
 
 export default App
+

@@ -16,63 +16,49 @@ const LoginPage = () => {
       <div className="login-right">
         <div className="help-icon">?</div>
         <div className="login-form-container">
-          <h1 className="welcome-title">Welcome Back</h1>
-          <p className="welcome-subtitle">Continue your journey to better health.</p>
-
-          <form className="login-form">
-            <div className="input-group">
-              <label>Login with Identity</label>
-              <div className="input-wrapper">
-                <span className="input-icon">🆔</span>
-                <input type="text" placeholder="Aadhaar Number / ABHA ID" />
-              </div>
-            </div>
-
-            <div className="otp-option">
-              <div className="otp-content">
-                <span className="whatsapp-icon">💬</span>
-                <div className="otp-text">
-                  <span className="otp-title">OTP via WhatsApp</span>
-                  <span className="otp-subtitle">Faster and more secure</span>
-                </div>
-              </div>
-              <span className="arrow-icon">›</span>
-            </div>
-
-            <button type="submit" className="sign-in-btn">
-              Sign In 🤝
-            </button>
-          </form>
-
-          <div className="divider">
-            <span>OR JOIN US</span>
+          <div className="header-section">
+            <h1 className="welcome-title">Get Immediate Medical Help</h1>
+            <p className="welcome-subtitle">Find hospitals, verify costs instantly</p>
           </div>
 
-          <div className="social-login">
-            <button className="google-btn">
-              <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" /> Google
-            </button>
-            <Link to="/home" className="signup-link">
-              <button className="signup-btn">
-                <span>👤</span> Sign Up
-              </button>
+          <div className="emergency-actions">
+            <Link to="/home" className="primary-emergency-btn">
+              Skip login 
             </Link>
+            <p className="guidance-text">We’ll guide you step-by-step.</p>
           </div>
 
-          <Link to="/home" className="skip-btn-link">
-             <button className="skip-login-btn">
-                Skip Login & Explore ⚡
-             </button>
-          </Link>
-
-          <div className="immediate-help-banner">
-            <div className="help-icon-circle">*</div>
-            <div className="help-content">
-              <span className="help-title">Need immediate help?</span>
-              <span className="help-subtitle">Our 24/7 care navigators are one tap away.</span>
+          <div className="trust-signals-minimal">
+            <div className="trust-item">
+              <span className="trust-icon">🛡️</span>
+              <div className="trust-text">
+                <span className="trust-label">Price Protection</span>
+                <span className="trust-desc">We audit bills in real-time.</span>
+              </div>
             </div>
-            <div className="call-btn">
-              <span>📞</span>
+            <div className="trust-item">
+              <span className="trust-icon">💳</span>
+              <div className="trust-text">
+                <span className="trust-label">Card Acceptance</span>
+                <span className="trust-desc">Guaranteed Ayushman/Insurance entry.</span>
+              </div>
+            </div>
+            <div className="trust-item">
+              <span className="trust-icon">💰</span>
+              <div className="trust-text">
+                <span className="trust-label">No Surcharge</span>
+                <span className="trust-desc">0% GST on life-saving drugs.</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="secondary-auth-section">
+            <div className="divider-soft"></div>
+            <p className="auth-label">Login for full features (optional)</p>
+            <div className="social-login-minimal">
+              <button className="google-btn-minimal">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" /> Google
+              </button>
             </div>
           </div>
         </div>

@@ -62,7 +62,7 @@ const HospitalDetails = () => {
           <section className="schemes-section">
             <div className="section-header">
               <h2>Benefit Support & Schemes</h2>
-              <a href="#" className="view-all">View all 24 supported</a>
+              <a href="#" className="view-all" onClick={(e) => { e.preventDefault(); alert('Insurance Directory Coming Soon: We are currently verifying 15+ additional private insurers for real-time coverage matching.'); }}>View all 24 supported</a>
             </div>
             <div className="schemes-grid">
               <div className="scheme-card">

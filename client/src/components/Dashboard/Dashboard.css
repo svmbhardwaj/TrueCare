@@ -594,14 +594,142 @@
   border-radius: var(--radius-xl);
 }
 
+/* ============================= */
+/* RESPONSIVE BREAKPOINTS        */
+/* ============================= */
+
+/* Tablet — sidebar + map stack vertically */
+@media (max-width: 1024px) {
+  .dashboard-main-container {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid rgba(63, 93, 62, 0.1);
+  }
+
+  .sidebar-content {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .map-pane {
+    min-height: 50vh;
+  }
+
+  .verified-info-panel {
+    top: 16px;
+    right: 16px;
+    width: 240px;
+    padding: 16px;
+    border-radius: 1rem;
+  }
+
+  .civic-compass-overlay {
+    max-width: 400px;
+    padding: 0 16px;
+  }
+
+  .emergency-hotline {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px;
+    border-radius: 1rem;
+  }
+}
+
+/* Mobile — sidebar hidden, bottom nav shown */
 @media (max-width: 768px) {
   .dashboard-sidebar {
     display: none;
   }
+
   .mobile-nav {
     display: flex;
   }
-  .verified-info-panel, .emergency-hotline {
-    right: 20px;
+
+  .map-pane {
+    min-height: calc(100vh - 72px - 72px); /* minus navbar and bottom nav */
+  }
+
+  .verified-info-panel {
+    top: auto;
+    bottom: 90px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    border-radius: 1rem;
+  }
+
+  .emergency-hotline {
+    bottom: 84px;
+    right: 12px;
+    left: auto;
+    padding: 10px 14px;
+    border-radius: 1rem;
+    gap: 10px;
+  }
+
+  .hotline-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hotline-number {
+    font-size: 1rem;
+  }
+
+  .civic-compass-overlay {
+    top: 12px;
+    max-width: 100%;
+    padding: 0 12px;
+  }
+
+  .compass-card {
+    padding: 12px;
+    gap: 12px;
+    border-radius: 12px;
+  }
+
+  .compass-main {
+    font-size: 0.8rem;
+  }
+
+  .glass-tooltip {
+    display: none; /* hide map tooltips on mobile to reduce clutter */
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .dashboard-main-container {
+    margin-top: 60px;
+  }
+
+  .emergency-hotline {
+    bottom: 84px;
+    right: 8px;
+    left: 8px;
+    justify-content: center;
+  }
+
+  .verified-info-panel {
+    bottom: 84px;
+    padding: 14px;
+  }
+
+  .info-desc {
+    font-size: 0.7rem;
+  }
+
+  .mob-nav-item {
+    font-size: 0.65rem;
+  }
+
+  .mob-nav-item.active {
+    padding: 6px 16px;
   }
 }

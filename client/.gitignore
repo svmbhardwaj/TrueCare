@@ -35,3 +35,7 @@ bower_components
 psd
 thumb
 sketch
+backend/uploads/
+*.pdf
+*.png
+*.webp
