@@ -86,6 +86,66 @@
   color: var(--hunter-green);
 }
 
+.analysis-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.metric-pill {
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.metric-pill span {
+  font-size: 0.67rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #556074;
+  font-weight: 700;
+}
+
+.metric-pill strong {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.metric-pill-risk {
+  background: rgba(248, 131, 121, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+}
+
+.metric-pill-quality {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(5, 150, 105, 0.22);
+}
+
+.extraction-source-label {
+  margin-top: 0.55rem;
+  font-size: 0.73rem;
+  color: #556074;
+  font-weight: 600;
+}
+
+.extraction-warning-card {
+  margin-top: 0.55rem;
+  background: rgba(254, 243, 199, 0.6);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #92400e;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
 /* Audit Table */
 .audit-table-wrapper {
   background-color: white;
@@ -174,3 +234,72 @@
   padding-left: 2.5rem;
   padding-right: 2.5rem;
 }
+
+/* Category Tags */
+.category-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.category-medicine { background: #eff6ff; color: #2563eb; }
+.category-room { background: #f5f3ff; color: #7c3aed; }
+.category-consultation { background: #fffbeb; color: #d97706; }
+.category-procedure { background: #fdf2f8; color: #db2777; }
+.category-consumable { background: #ecfdf5; color: #059669; }
+.category-tax { background: #fff7ed; color: #ea580c; }
+.category-other { background: #f1f5f9; color: #64748b; }
+
+.risk-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.risk-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.risk-pill-high {
+  background: rgba(239, 68, 68, 0.14);
+  color: #b91c1c;
+}
+
+.risk-pill-medium {
+  background: rgba(245, 158, 11, 0.17);
+  color: #b45309;
+}
+
+.risk-pill-low {
+  background: rgba(59, 130, 246, 0.14);
+  color: #1d4ed8;
+}
+
+.risk-pill-none {
+  background: rgba(16, 185, 129, 0.14);
+  color: #047857;
+}
+
+.risk-score-text,
+.risk-flags-count {
+  font-size: 0.66rem;
+  color: #556074;
+  font-weight: 700;
+}
+
