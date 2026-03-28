@@ -16,13 +16,24 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import './BillResult.css';
 
+const TRUEBILL_RESULT_CACHE_KEY = 'truecare:truebill:lastResult';
+
 const BillResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showOCR, setShowOCR] = useState(false);
 
-  // Get real data from navigation state (sent from BillAI page)
-  const result = location.state?.result;
+  // Prefer navigation state, but recover from session cache on refresh/alias redirects.
+  const cachedPayload = (() => {
+    try {
+      const raw = sessionStorage.getItem(TRUEBILL_RESULT_CACHE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+  const resultPayload = location.state || cachedPayload || null;
+  const result = resultPayload?.result;
 
   // If no data (user navigated here directly), show fallback
   if (!result) {
@@ -153,7 +164,7 @@ const BillResult = () => {
               </p>
               <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#16a34a', fontSize: '0.85rem', fontWeight: 600 }}>
-                  <CheckCircle size={14} /> {summary?.okItems || 0} OK
+                  <CheckCircle2 size={14} /> {summary?.okItems || 0} OK
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#ef4444', fontSize: '0.85rem', fontWeight: 600 }}>
                   <AlertTriangle size={14} /> {summary?.flaggedItems || 0} Flagged

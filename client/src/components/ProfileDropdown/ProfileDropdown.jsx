@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { auth } from '../../services/firebase';
+import { auth, firebaseAuthEnabled } from '../../services/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, User, Settings } from 'lucide-react';
@@ -12,6 +12,11 @@ const ProfileDropdown = () => {
 
     // Listen for Auth state changes
     useEffect(() => {
+        if (!firebaseAuthEnabled || !auth) {
+            setUser(null);
+            return undefined;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
         });
@@ -31,6 +36,10 @@ const ProfileDropdown = () => {
 
     const handleLogout = async () => {
         try {
+            if (!auth) {
+                navigate('/');
+                return;
+            }
             await signOut(auth);
             navigate('/'); // Redirect to login page
         } catch (error) {

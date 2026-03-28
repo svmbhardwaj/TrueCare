@@ -25,6 +25,8 @@ import { analyzeBillRequest } from '../../services/truebillApi';
 import { getDemoTruebillResult } from '../../services/truebillDemoData';
 import './BillAI.css';
 
+const TRUEBILL_RESULT_CACHE_KEY = 'truecare:truebill:lastResult';
+
 const RECENT_AUDITS = [
   { id: 1, name: 'Med-Invoice-992.pdf', date: 'Oct 24, 2024', hospital: 'St. Jude Medical Center', amount: '₹1,42,500', status: 'Anomaly Detected', statusColor: 'red' },
   { id: 2, name: 'Pharmacy_Receipt_4.jpg', date: 'Oct 22, 2024', hospital: 'Apollo Pharmacy Ltd.', amount: '₹4,200', status: 'Analysis Complete', statusColor: 'green' },
@@ -142,6 +144,16 @@ const BillAI = () => {
 
       const data = await analyzeBillRequest({ file: selectedFile });
 
+      sessionStorage.setItem(
+        TRUEBILL_RESULT_CACHE_KEY,
+        JSON.stringify({
+          result: data,
+          billImage: preview,
+          isDemo: false,
+          savedAt: Date.now(),
+        })
+      );
+
       stepTimers.forEach(clearTimeout);
       setLoadingStep(4);
 
@@ -169,12 +181,15 @@ const BillAI = () => {
     setTimeout(() => setLoadingStep(3), 1400);
     setTimeout(() => {
       setLoadingStep(4);
+      const demoPayload = {
+        result: getDemoTruebillResult(),
+        billImage: null,
+        isDemo: true,
+        savedAt: Date.now(),
+      };
+      sessionStorage.setItem(TRUEBILL_RESULT_CACHE_KEY, JSON.stringify(demoPayload));
       navigate('/truebill/result', {
-        state: {
-          result: getDemoTruebillResult(),
-          billImage: null,
-          isDemo: true,
-        },
+        state: demoPayload,
       });
     }, 1900);
   };

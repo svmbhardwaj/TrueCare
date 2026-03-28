@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { auth } from "../../services/firebase";
+import { auth, firebaseAuthEnabled } from "../../services/firebase";
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import './Navbar.css';
 
@@ -11,6 +11,11 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!firebaseAuthEnabled || !auth) {
+      setUser(null);
+      return undefined;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
@@ -28,6 +33,10 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
+    if (!auth) {
+      navigate('/');
+      return;
+    }
     await signOut(auth);
     setShowDropdown(false);
     navigate('/');

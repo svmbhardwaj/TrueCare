@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
@@ -11,6 +11,23 @@ const firebaseConfig = {
     appId: "1:83167307342:web:5daafa98ebeb9d80ab051f"
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
+let app = null;
+let auth = null;
+let googleProvider = null;
+
+export let firebaseAuthEnabled = false;
+
+try {
+    if (firebaseConfig.apiKey && firebaseConfig.apiKey.trim()) {
+        app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        googleProvider = new GoogleAuthProvider();
+        firebaseAuthEnabled = true;
+    } else {
+        console.warn("Firebase disabled: missing VITE_FIREBASE_API_KEY.");
+    }
+} catch (error) {
+    console.error("Firebase initialization failed. Continuing without auth:", error?.message || error);
+}
+
+export { app, auth, googleProvider };

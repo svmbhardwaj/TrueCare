@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../../services/firebase';
+import { auth, googleProvider, firebaseAuthEnabled } from '../../services/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import './LoginPage.css';
 
@@ -8,6 +8,11 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
+    if (!firebaseAuthEnabled || !auth || !googleProvider) {
+      alert('Google login is temporarily unavailable. Please use Skip login.');
+      return;
+    }
+
     try {
       await signInWithPopup(auth, googleProvider);
       navigate('/home');
@@ -87,7 +92,12 @@ const LoginPage = () => {
             <span>Login for full features (optional)</span>
           </div>
 
-          <button className="google-login-button" onClick={handleGoogleSignIn}>
+          <button
+            className="google-login-button"
+            onClick={handleGoogleSignIn}
+            disabled={!firebaseAuthEnabled}
+            title={firebaseAuthEnabled ? 'Sign in with Google' : 'Firebase is not configured in this deployment'}
+          >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
               alt="Google"
