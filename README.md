@@ -14,7 +14,7 @@
 
 <br/>
 
-> **India Innovates '26 — Hackathon Project**
+> **Hackathon Project**
 
 </div>
 
