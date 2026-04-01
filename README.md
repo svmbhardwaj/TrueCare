@@ -6,7 +6,7 @@
 
 *From finding the right emergency hospital to exposing fraudulent medical bills — TrueCare protects your family, physically and financially.*
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_App-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://true-care-delta.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_App-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://true-care-seven.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/svmbhardwaj/TrueCare)
 [![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
